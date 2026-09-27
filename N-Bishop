@@ -1,0 +1,82 @@
+#include <iostream>
+using namespace std;
+
+int boardSize;
+int bishopBoard[20][20];
+
+bool checkBishop(int row, int col)
+{
+    for(int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--)
+    {
+        if(bishopBoard[i][j] == 1)
+            return false;
+    }
+
+    for(int i = row - 1, j = col + 1; i >= 0 && j < boardSize; i--, j++)
+    {
+        if(bishopBoard[i][j] == 1)
+            return false;
+    }
+
+    for(int i = row + 1, j = col - 1; i < boardSize && j >= 0; i++, j--)
+    {
+        if(bishopBoard[i][j] == 1)
+            return false;
+    }
+
+    for(int i = row + 1, j = col + 1; i < boardSize && j < boardSize; i++, j++)
+    {
+        if(bishopBoard[i][j] == 1)
+            return false;
+    }
+
+    return true;
+}
+
+void showBoard()
+{
+    for(int row = 0; row < boardSize; row++)
+    {
+        for(int col = 0; col < boardSize; col++)
+        {
+            if(bishopBoard[row][col] == 1)
+                cout << "B ";
+            else
+                cout << ". ";
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
+void placeBishops(int position, int count)
+{
+    if(count == boardSize)
+    {
+        showBoard();
+        return;
+    }
+
+    if(position == boardSize * boardSize)
+        return;
+
+    int row = position / boardSize;
+    int col = position % boardSize;
+
+    if(checkBishop(row, col))
+    {
+        bishopBoard[row][col] = 1;
+        placeBishops(position + 1, count + 1);
+        bishopBoard[row][col] = 0;
+    }
+
+    placeBishops(position + 1, count);
+}
+
+int main()
+{
+    cin >> boardSize;
+    placeBishops(0, 0);
+    return 0;
+}
