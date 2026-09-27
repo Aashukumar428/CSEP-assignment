@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+int boardSize;
+int queenBoard[20][20];
+
+bool checkPlace(int row, int col)
+{
+    for(int i = 0; i < row; i++)
+    {
+        if(queenBoard[i][col] == 1)
+            return false;
+    }
+
+    for(int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--)
+    {
+        if(queenBoard[i][j] == 1)
+            return false;
+    }
+
+    for(int i = row - 1, j = col + 1; i >= 0 && j < boardSize; i--, j++)
+    {
+        if(queenBoard[i][j] == 1)
+            return false;
+    }
+
+    return true;
+}
+
+void showBoard()
+{
+    for(int row = 0; row < boardSize; row++)
+    {
+        for(int col = 0; col < boardSize; col++)
+        {
+            if(queenBoard[row][col] == 1)
+                cout << "Q ";
+            else
+                cout << ". ";
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
+void placeQueens(int row)
+{
+    if(row == boardSize)
+    {
+        showBoard();
+        return;
+    }
+
+    for(int col = 0; col < boardSize; col++)
+    {
+        if(checkPlace(row, col))
+        {
+            queenBoard[row][col] = 1;
+            placeQueens(row + 1);
+            queenBoard[row][col] = 0;
+        }
+    }
+}
+
+int main()
+{
+    cin >> boardSize;
+    placeQueens(0);
+    return 0;
+}
