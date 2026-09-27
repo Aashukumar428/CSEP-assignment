@@ -1,0 +1,74 @@
+#include <iostream>
+using namespace std;
+
+int boardSize;
+int knightBoard[20][20];
+
+bool checkKnight(int row, int col)
+{
+    int moveRow[8] = {-2, -2, -1, -1, 1, 1, 2, 2};
+    int moveCol[8] = {-1, 1, -2, 2, -2, 2, -1, 1};
+
+    for(int k = 0; k < 8; k++)
+    {
+        int newRow = row + moveRow[k];
+        int newCol = col + moveCol[k];
+
+        if(newRow >= 0 && newRow < boardSize &&
+           newCol >= 0 && newCol < boardSize)
+        {
+            if(knightBoard[newRow][newCol] == 1)
+                return false;
+        }
+    }
+
+    return true;
+}
+
+void showBoard()
+{
+    for(int row = 0; row < boardSize; row++)
+    {
+        for(int col = 0; col < boardSize; col++)
+        {
+            if(knightBoard[row][col] == 1)
+                cout << "K ";
+            else
+                cout << ". ";
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+}
+
+void placeKnights(int position, int count)
+{
+    if(count == boardSize)
+    {
+        showBoard();
+        return;
+    }
+
+    if(position == boardSize * boardSize)
+        return;
+
+    int row = position / boardSize;
+    int col = position % boardSize;
+
+    if(checkKnight(row, col))
+    {
+        knightBoard[row][col] = 1;
+        placeKnights(position + 1, count + 1);
+        knightBoard[row][col] = 0;
+    }
+
+    placeKnights(position + 1, count);
+}
+
+int main()
+{
+    cin >> boardSize;
+    placeKnights(0, 0);
+    return 0;
+}
